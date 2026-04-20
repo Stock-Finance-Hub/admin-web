@@ -91,7 +91,11 @@ export function NewsListPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((news) => (
-            <Card key={news.id} className="flex flex-col overflow-hidden">
+            <Card
+              key={news.id}
+              className="group flex cursor-pointer flex-col overflow-hidden transition-shadow hover:shadow-md"
+              onClick={() => navigate(`/news/${news.id}`)}
+            >
               {news.coverImage ? (
                 <img
                   src={news.coverImage}
@@ -113,13 +117,16 @@ export function NewsListPage() {
                     <Badge tone="neutral">{news.images.length} images</Badge>
                   )}
                 </div>
-                <h3 className="line-clamp-2 text-base font-semibold text-slate-900">
+                <h3 className="line-clamp-2 text-base font-semibold text-slate-900 group-hover:text-slate-700">
                   {news.title}
                 </h3>
                 <p className="mt-1 line-clamp-3 text-sm text-slate-500">
                   {news.description}
                 </p>
-                <div className="mt-4 flex items-center gap-2">
+                <div
+                  className="mt-4 flex items-center gap-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <Button
                     as={Link}
                     to={`/news/${news.id}/edit`}
