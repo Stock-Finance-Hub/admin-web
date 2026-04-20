@@ -85,8 +85,8 @@ export function MarkdownEditor({
       {label && <span className="text-sm font-medium text-slate-700">{label}</span>}
 
       <div className="rounded-lg border border-slate-300 bg-white">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-2 py-2">
-          <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-2 py-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-1 overflow-x-auto">
             {TOOLBAR.map((action) => (
               <button
                 key={action.title}
@@ -136,7 +136,7 @@ export function MarkdownEditor({
             <div
               className={cn(
                 'overflow-auto px-4 py-3',
-                tab === TAB_SPLIT && 'md:max-h-[28rem]',
+                tab === TAB_SPLIT && 'md:max-h-112',
               )}
             >
               <MarkdownPreview source={value} />

@@ -70,7 +70,9 @@ export function NewsListPage() {
         title="News / Feeds"
         description="Create, edit, and remove news shown to users."
         actions={
-          <Button onClick={() => navigate('/news/new')}>New post</Button>
+          items.length > 0 ? (
+            <Button onClick={() => navigate('/news/new')}>New post</Button>
+          ) : null
         }
       />
 
