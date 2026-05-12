@@ -1,10 +1,14 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { authApi } from './auth.api.js';
-import { setUnauthorizedHandler } from '../../lib/api.js';
 import {
-  ADMIN_STORAGE_KEY,
-  TOKEN_STORAGE_KEY,
-} from '../../lib/config.js';
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { authApi } from "./auth.api.js";
+import { setUnauthorizedHandler } from "../../lib/api.js";
+import { ADMIN_STORAGE_KEY, TOKEN_STORAGE_KEY } from "../../lib/config.js";
 
 const AuthContext = createContext(null);
 
@@ -48,8 +52,11 @@ export function AuthProvider({ children }) {
         setAdmin(fresh);
         localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(fresh));
       })
-      .catch(() => {
-        if (!cancelled) logout();
+      .catch((err) => {
+        if (cancelled) return;
+        if (err?.response?.status === 401) {
+          logout();
+        }
       })
       .finally(() => {
         if (!cancelled) setBootstrapping(false);
@@ -57,17 +64,26 @@ export function AuthProvider({ children }) {
     return () => {
       cancelled = true;
     };
-    // Run once on mount with the token we have.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const login = useCallback(async ({ email, password }) => {
-    const { accessToken, admin: next } = await authApi.login({ email, password });
+  const requestOtp = useCallback(({ email, password }) => {
+    return authApi.login({ email, password });
+  }, []);
+
+  const verifyOtp = useCallback(async ({ email, code }) => {
+    const { accessToken, admin: next } = await authApi.verifyOtp({
+      email,
+      code,
+    });
     localStorage.setItem(TOKEN_STORAGE_KEY, accessToken);
     localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(next));
     setToken(accessToken);
     setAdmin(next);
     return next;
+  }, []);
+
+  const resendOtp = useCallback(({ email }) => {
+    return authApi.resendOtp({ email });
   }, []);
 
   const value = useMemo(
@@ -76,10 +92,12 @@ export function AuthProvider({ children }) {
       token,
       isAuthenticated: Boolean(token && admin),
       bootstrapping,
-      login,
+      requestOtp,
+      verifyOtp,
+      resendOtp,
       logout,
     }),
-    [admin, token, bootstrapping, login, logout],
+    [admin, token, bootstrapping, requestOtp, verifyOtp, resendOtp, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -87,6 +105,6 @@ export function AuthProvider({ children }) {
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 };

@@ -7,7 +7,10 @@ import sfhLogo from '../assets/logo/sfh_logo.jpg';
 
 const navItems = [
   { to: '/news', label: 'News / Feeds' },
+  { to: '/companies', label: 'Companies' },
+  { to: '/indices', label: 'Indices' },
   { to: '/users', label: 'Users' },
+  { to: '/sync', label: 'Data sync' },
 ];
 
 function SidebarContent({ admin, onLogout, onNavigate }) {
@@ -77,12 +80,10 @@ export function AppShell() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
-      {/* Desktop sidebar */}
       <aside className="hidden h-full w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
         <SidebarContent admin={admin} onLogout={onLogout} />
       </aside>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div
