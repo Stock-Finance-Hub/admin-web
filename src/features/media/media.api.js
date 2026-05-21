@@ -11,10 +11,9 @@ export const mediaApi = {
     await api.delete('/media', { data: { url } });
   },
 
-  // Uploads a single file directly to Cloudinary using a signature from our backend.
-  // Returns the Cloudinary response (secure_url, public_id, bytes, format, ...).
-  uploadFile: async ({ file, folderKey, onProgress }) => {
-    const sig = await mediaApi.signUpload(folderKey);
+  uploadFile: async ({ file, folderKey, resourceType, onProgress }) => {
+    const signBody = resourceType ? { resourceType } : {};
+    const sig = await mediaApi.signUpload(folderKey, signBody);
 
     const form = new FormData();
     form.append('file', file);
@@ -22,6 +21,7 @@ export const mediaApi = {
     form.append('timestamp', String(sig.timestamp));
     form.append('signature', sig.signature);
     form.append('folder', sig.folder);
+    if (sig.type && sig.type !== 'upload') form.append('type', sig.type);
 
     const { data } = await axios.post(sig.uploadUrl, form, {
       onUploadProgress: (e) => {

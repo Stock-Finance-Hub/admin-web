@@ -7,6 +7,9 @@ import sfhLogo from '../assets/logo/sfh_logo.jpg';
 
 const navItems = [
   { to: '/news', label: 'News / Feeds' },
+  { to: '/pre-market', label: 'Pre-Market' },
+  { to: '/research', label: 'Research' },
+  { to: '/subscriptions', label: 'Subscriptions' },
   { to: '/companies', label: 'Companies' },
   { to: '/indices', label: 'Indices' },
   { to: '/users', label: 'Users' },

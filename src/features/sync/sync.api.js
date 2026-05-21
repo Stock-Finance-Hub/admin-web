@@ -17,4 +17,20 @@ export const syncApi = {
     const { data } = await api.post('/admin/sync/daily', scope ?? {});
     return data;
   },
+  async triggerIndices() {
+    const { data } = await api.post('/admin/sync/indices');
+    return data;
+  },
+  async triggerOneIndex(symbol) {
+    const { data } = await api.post(`/admin/sync/indices/${encodeURIComponent(symbol)}`);
+    return data;
+  },
+  async indicesCoverage(signal) {
+    const { data } = await api.get('/admin/sync/indices/coverage', { signal });
+    return data.items ?? [];
+  },
+  async wsTicket() {
+    const { data } = await api.post('/admin/sync/ws-ticket');
+    return data;
+  },
 };

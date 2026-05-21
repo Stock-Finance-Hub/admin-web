@@ -11,5 +11,6 @@ export { PageHeader } from './PageHeader.jsx';
 export { Field } from './Field.jsx';
 export { ImageUploader } from './ImageUploader.jsx';
 export { ImageGalleryUploader } from './ImageGalleryUploader.jsx';
+export { PdfUploader } from './PdfUploader.jsx';
 export { MarkdownEditor } from './MarkdownEditor.jsx';
 export { MarkdownPreview } from './MarkdownPreview.jsx';
